@@ -1,0 +1,30 @@
+Best Practices to Follow While Creating Docker Image & Files
+------------------------------------------------------------
+1.Use "Alpine" base image where ever its possible
+  Alpine: 
+  A minimal Docker image based on Alpine Linux with a complete package index and only 5MB in size!
+  Light weight linux library
+  its does not required much CPU/Memory resources
+2.Don't install have un-necassary packages(software) & con't copy un-necassary files
+3.Don't run container process as root user start container process(Application) as non-root user
+4.Try to reduce the number of layers of image as much possible because if is more layers it will impact the application performance
+  
+  Example:
+  RUN yum install git -y
+  RUN yum install wget -y
+  
+  if we add above 2 entries in dockerfile and run it will generate 2 layers insted of 2 layers we can merge in single command
+  RUN yum install get -y && yum install wget -y
+  
+  merge multiple related RUN instrcutions into single instruction so that it will create only one layer
+5.Always recommanded way to use CMD and ENTRYPOINT as shell form
+6.If we extract the any tar/zip file we need to delete otherwise it will increase the size un-necessary
+7.Try to scan the image for vulnerabilities
+  Note: 
+  means un-necessary packages/software it will scan
+  In ECR we have image "scan" and it will provide the report as well
+  Other we have third party tools like (Anchor,ciair) 
+7.Try to use "Multi-stage" dockerfile to reduce the size of finale image
+
+     
+  

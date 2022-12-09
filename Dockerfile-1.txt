@@ -1,0 +1,12 @@
+FROM alpine/git as gitclone
+WORKDIR /app
+RUN git clone https://github.com/MithunTechnologiesDevOps/maven-web-application.git
+
+FROM maven:3.8-eclipse-temurin-11 as mvnbuild
+WORKDIR /app
+COPY --from=gitclone /app/maven-web-application/ ./
+RUN mvn package
+
+FROM tomcat:8.5.78-jre8-temurin-focal
+COPY --from=mvnbuild /app/target/*.war  /usr/local/tomcat/webapps
+EXPOSE 8086

@@ -1,0 +1,29 @@
+node{
+    def mavenHome = tool name: "Maven"
+    def buildNumber = BUILD_NUMBER
+    stage("SCM Checkout"){
+       git 'git url'
+        
+    }
+    stage("MVN Build"){
+        sh "${mavenHome}/bin/mvn clean package"
+    }
+    
+    stage("Create Image"){
+        sh "docker build -t venki22/maven-web-application:${buildNumber} ."
+    }
+    
+    stage("Push image"){
+        withCredentials([string(credentialsId: 'dockerhubpwds', variable: 'dockerhubpwd')]) {
+        sh "docker login -u venki22 -p ${dockerhubpwd}"
+        }
+        sh "docker push venki22/maven-web-application:${buildNumber}"
+    }
+    stage("Deploy to image using sshagent"){
+        sshagent(['sshagenpwd']) {
+        sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.8.134 docker rm -f javawebcontainer || true"
+        sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.8.134 docker run --name javawebcontainer -d -p 9090:8080 venki22/maven-web-application:${buildNumber}"
+        }
+    }
+    
+}

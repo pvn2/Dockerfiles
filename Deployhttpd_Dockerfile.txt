@@ -1,0 +1,10 @@
+#RUN image in httpd webserver:
+FROM centos:latest
+MAINTAINER newwebcorplimited
+RUN yum install httpd -y
+COPY index.html /var/www/html/
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+EXPOSE 80
+
+docker build -t webimg:v1 -f Dockerfile_Httpd .
+docker run -d -p 1234:80 webimg:v1

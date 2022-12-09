@@ -1,0 +1,19 @@
+Multi-stage Docker
+-----------------
+FROM maven:3.5.4-jdk-8 as build
+WORKDIR /app
+COPY . .
+RUN mvn clean package
+
+FROM tomcat:8.0.20-jre8
+COPY --from=build /app/target/maven-web-appllication.war /usr/local/tomcat/webapps/maven-web-application.war
+
+Note:
+---- 
+Finale image will not have un-necessay packages (like maven software here)
+In this way Finale image will be light weight
+
+
+Can we use muliple FROM instruction in docker file?
+Yes, the type of docker file is multi-stage docker file
+

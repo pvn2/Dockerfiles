@@ -1,0 +1,75 @@
+Which senario will use CMD and ENTRYPOINT?
+USECASE:
+Always i want to execute some command but i should have a control on args
+sh catalina.sh run
+sh catalina.sh start
+
+using CMD:
+FROM ubuntu
+RUN apt-get update -y && apt-get install git -y
+RUN touch catalina.sh && chmod 777 catalina.sh
+CMD ["echo","sh","catalina.sh"]
+
+if we run container always it will execute sh catalina.sh
+
+but if we use ENTRYPOINT
+FROM ubuntu
+RUN apt-get update -y && apt-get install git -y
+RUN touch catalina.sh && chmod 777 catalina.sh
+CMD ["start"]
+ENTRYPOINT ["echo","sh","catalina.sh"]
+
+By default it will execute sh catalina.sh start
+if we want we can give argument while creating container like below
+docker run imgone run
+sh catalina.sh run
+
+Types of forms:
+shell form
+executable form
+
+Shell form:
+-----------
+RUN <command> <args>
+RUN yum install git -y
+Internally it will execute like below
+/bin/bash -c yum install git -y
+It will be running as child process
+
+CMD java -jar app.jar
+Internally it will execute like below
+/bin/bash -c java -jar app.jar
+
+ENTRYPOINT echo "Welcome To Entrypoint"	
+Internally it will execute like below
+/bin/bash -c echo "Welcome To Entrypoint"
+
+Executable Form:
+----------------	
+RUN ["<executable">, "<arg1>", "<arg2"> ]
+RUN [ "mkdir", "-p", "/test/test1" ]
+It will be running as parent process(i.e root process)
+Internally it will execute like below
+/bin/mkdir -p /test/test1
+
+CMD["java","-jar","app.jar"]
+/bin/ java -jar app.jar
+
+ENTRYPOINT ["echo", "WelcomeToEntryPoint"]
+/bin/echo WelcomeToEntryPoint
+
+
+Did u faced any issue?
+
+Initially we dont know shell and executable form
+We have dockerized one javaapplication using shell form like below
+
+ENTRYPOINT java -jar app.jar
+
+Internally it will execute like below
+/bin/bash (or) /bin/sh -c java -jar app.jar
+
+This java application interally connection to database we have concept like connection pooling (i.e it will acqure some database connection whn ever required) application getting connected fine some time due to some reson containers are getting down but it is not releasing the resource (i.e connection pooling) even through killed, when ever  process is down java process doesnt know becasue it is running as child process(/bin/sh or /bin/bash process) shell is stopping the process without stoping the connections and java does not know.. later we changed shell to executable form issue got resolved, when ever container getting stop all connection will be released becasue java is running as parent process (i.e root process will be notified and it will releasing the db conneciton etc)
+
+CMD AND ENTRYPOINT is recommanded to write executable form
+

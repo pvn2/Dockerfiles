@@ -1,0 +1,12 @@
+version: '3.0'
+services:
+  webapp-1:
+    image: nginx
+    ports:
+    - 9090:80/tcp
+  webapp-2:
+    image: httpd
+    ports:
+    - 2020:80/tcp
+  database:
+    image: mysql:8.0

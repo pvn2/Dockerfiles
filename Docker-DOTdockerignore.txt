@@ -1,0 +1,3 @@
+.dockerigonrefile
+-----------------
+copy all files from buildcontext to image ignore few files in this case we will use .dockerignorefile

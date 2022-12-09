@@ -1,0 +1,12 @@
+git https://github.com/MithunTechnologiesDevOps/Python-Flask-RestAPI.git
+cd Python-Flask-RestAPI
+docker build -t venki22/pythonApp:1
+docker push venki22/pythonApp:1
+docker login -u venki22
+docker run --name pythoncon -p 9090:5000 -d venki22/pythonApp:1
+
+in console testing:
+curl -vL locahost:9090
+
+outside browser:
+http://13.234.122.67:9090/api/tasks

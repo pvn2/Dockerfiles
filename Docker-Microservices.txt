@@ -1,0 +1,59 @@
+Monolithic Architechture vs Micro Services Architechture
+Monolithic Architechture:
+Entire application will be built and deployed as single entity(Package) in monolithic.
+All below modules as same code base will build and deploy as a single entity
+Generate single .war/.ear (flipkart.war/flipkart.war)
+Entire code base should be same language
+Example:
+  Flipkar (Lot of modules)
+     Login
+     Registration
+     Products
+     addCart
+     Payment
+     Order
+Advantages:
+Simple to develop and simple to deploy also
+Easy to debug and trace the error
+Simple test
+
+Drawbacks:
+Difficult to understand modify
+Tighly coupled
+Any changes in one module we have to deploye whole application
+
+Micro Services Architecture:
+Application will be developed as multiple lossely coupled services(Projects)
+Each module as one service (i.e micro service)
+Entire application break into small application and matained independently
+Each service we can develop diff language if required
+Each module will generate seaprate package
+
+drawback
+Each module should communcate other module it is not going to be local call need to make network call(i.e api call) api has to invoke other service.
+
+
+
+All feature are same code base and this will generate some package
+Package contains every things
+
+Select ElasticIP -->Actions--> Disassociate Elastic IP Address
+Micro Services Architechture : Application will be developed as multiple lossely coupled services(Projects).
+
+This microservices can be developed,deployed, maintained independently
+We can develope each module different programatic language
+Each module will generate separate package
+One Moduel(Microsevice) is communicate to other module
+Microservices very well to run under containers
+ELK/EFK
+Elastic Search & Log Stash Kibana
+Elastic Search File Beate.Kibana
+Splunk
+Each microsevice will be build and deploye independently
+
+
+
+
+
+
+

@@ -1,0 +1,140 @@
+
+
+
+
+
+
+
+
+
+netstat:tunlp
+
+
+
+
+
+  Note:
+     The above command runs tomcat in detached mode, so we get out # prompt back
+     This is check in local system if not find then it will create image and container based on image from
+   
+
+
+
+
+#process will be paused(sleeping mode)
+docker pause
+docker unpause
+
+
+
+#Delete the container(if any running container then it will not remove)
+docker rm <containerId/Name>
+
+#To delete container first stop the continer using(kill/stop command) and delete the container using rm
+docker stop <containerName/Id>
+docker rm <containerName/Id>
+
+#Delete running container forceflly using below command
+docker rm -f <containerName/Id>
+
+#Delete all container(including running/stop) with single command
+docker rm -f $(docker ps -aq)
+-a --> all container including stop/running 
+q --> it will return ids
+
+#Delete only stopped container
+docker container prune
+docker rm $(docker ps  -aq -f status=exited)
+
+#Operating system with contaier level
+Exited (0) 
+0--> is indicates command is executed successfully
+docker run -it <ImageName> /bin/bash
+--Each container will have own file system
+  Container is lightweight
+  Most of the softwares/libraries/commands will not be available inside the container
+exit
+
+How to trouble shoot your applications which are running as containers?
+1. Check if the container is up and running
+   docker ps
+2. Chheck the logs of the container
+   docker logs <containerId/Name>
+   docker logs -f <containerId/Name>
+   -f: floating logs
+   stout
+   stderror
+   docker logs <containerId/Name>
+   docker logs --tail 10 <containerId/Name>
+
+
+
+   
+  
+   
+    docker attached <containerId/Name>
+    It will attached the container shell to server shell
+    We can able to see the all logs information while accessing application if we attach the continer        using docker attached
+    "ctrl + c" and try to access the application (we will not access)
+    docker start <containerId/Name>
+    we can access now.
+
+    How can we copy files to "system to container and container to system"?
+    docker exec javawebapp ls logs
+    "we will get few .logs files"
+    1.We need to take that file from "container to system" using below command
+        docker cp <containerId/Name>:<containerlog-path> <system-path>
+	docker cp <containerId/Name>:/usr/local/tomcat/logs/catalina.20211224.log cataina.log
+      
+        copy files from "system to container"
+        docker cp cataina.log <containerId/Name>:/usr/local/tomcat/logs/catalina.20211224.log
+
+     What is difference between "docker cp and COPY"?
+     COPY: 
+     COPY is docker file instruction using COPY we can copy files/folders to image while creating 	     image
+     docker cp:
+     Using docker cp we can copy files "system to the container and container to the system"
+
+
+     Any changes happend inside the container will that changes will exist if container      deleted/recreated ?
+     docker run -d -p 8080:8080 venki22/maven-web-application /bin/bash
+     create some files inside the container using docker commit command we can retaine the change          eventhrough container stopped or deleted.
+
+     docker commit?
+     retaine container changes as a image
+     docker commit <containerName/Id> <registryURL/repository:tag>
+     docker commit javawebapp venki22/maven-web-application:fromcontainer
+     docker images
+     docker push venki22/maven-web-application:fromcontainer
+     docker pull venki22/maven-web-application:fromcontainer (from other server or same server)
+     docker run -d -p 8080:8080 venki22/maven-web-application:fromcontainer /bin/bash
+     #verify files available or not
+    
+     
+
+   
+     
+
+
+     
+    
+    
+
+  
+
+
+
+
+   
+
+   
+
+
+ 
+
+
+
+
+
+
+

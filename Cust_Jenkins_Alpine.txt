@@ -1,0 +1,8 @@
+FROM alpine
+MAINTAINER narsimha.venkata@gmail.com
+RUN apk add openjdk8 wget
+RUN apk add bash
+WORKDIR /opt
+RUN wget https://get.jenkins.io/war-stable/2.319.1/jenkins.war
+ENTRYPOINT ["java","-jar","jenkins.war"]
+

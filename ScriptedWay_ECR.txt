@@ -1,0 +1,23 @@
+node{
+    def buildNumber = BUILD_NUMBER
+    stage("SCM Checkout"){
+      git branch: 'development', url: 'https://github.com/Venki22/maven-web-application.git'
+    }
+    stage("Build image"){
+      def mavenHome = tool name: "Maven"
+      sh "${mavenHome}/bin/mvn clean package"
+    }
+    
+    stage("Push_ecr"){
+        sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 093557763012.dkr.ecr.ap-south-1.amazonaws.com"
+        sh "docker build -t 093557763012.dkr.ecr.ap-south-1.amazonaws.com/mvnproject ."
+        sh "docker tag 093557763012.dkr.ecr.ap-south-1.amazonaws.com/mvnproject:latest 093557763012.dkr.ecr.ap-south-1.amazonaws.com/mvnproject:${buildNumber}"
+        sh "docker push 093557763012.dkr.ecr.ap-south-1.amazonaws.com/mvnproject:${buildNumber}"
+    }
+    stage("Deploy_from_ecr"){
+        sshagent(['sshagenpwd']) {
+        sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.8.134 docker rm -f mavenwebappcon || true"
+        sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.8.134 docker run --name mavenwebappcon -d -p 9091:8080 venki22/maven-web-application:${buildNumber}"
+        }
+    }
+}

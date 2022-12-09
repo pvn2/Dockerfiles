@@ -1,0 +1,23 @@
+node{
+    
+   def buildNumber = BUILD_NUMBER
+   
+    stage("Git CheckOut"){
+        git url: 'https://github.com/org-app-sri/java-web-app-docker.git',branch: 'master'
+    }
+     stage(" Maven Clean Package"){
+      def mavenHome =  tool name: "Maven-3.6.3", type: "maven"
+      def mavenCMD = "${mavenHome}/bin/mvn"
+      sh "${mavenCMD} clean package"
+     }
+     stage("Build Dokcer Image"){
+         sh "docker build -t 172.31.30.177:9000/java-web-app:${buildNumber} ."
+     }
+     stage("Docker login and Push"){
+     withCredentials([string(credentialsId: 'nexus_private_repo', variable: 'nexus_private_repo')]) {
+     sh "docker login -u admin -p ${nexus_private_repo}  172.31.30.177:9000"
+     }
+      sh "docker push 172.31.30.177:9000/java-web-app:${buildNumber}"
+     }
+      
+}
